@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор простых чисел</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #f8e8e8 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #666 0%, #888 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .calculator {
+            padding: 40px 30px;
+        }
+
+        .input-group {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #ff6b93;
+            box-shadow: 0 0 0 3px rgba(255, 107, 147, 0.1);
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-btn {
+            background: linear-gradient(135deg, #ff6b93 0%, #ff8ea1 100%);
+            color: white;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 147, 0.3);
+        }
+
+        .range-btn {
+            background: linear-gradient(135deg, #888 0%, #aaa 100%);
+            color: white;
+        }
+
+        .range-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(136, 136, 136, 0.3);
+        }
+
+        .result {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 4px solid #ff6b93;
+        }
+
+        .result h3 {
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .result-text {
+            font-size: 1.2em;
+            line-height: 1.6;
+        }
+
+        .prime {
+            color: #ff6b93;
+            font-weight: 600;
+        }
+
+        .not-prime {
+            color: #666;
+            font-weight: 600;
+        }
+
+        .primes-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .prime-number {
+            background: linear-gradient(135deg, #ff6b93 0%, #ff8ea1 100%);
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .info {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-left: 4px solid #888;
+        }
+
+        .info h3 {
+            color: #666;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .info ul {
+            list-style-position: inside;
+            line-height: 1.6;
+        }
+
+        .info li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .container {
+                margin: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 Калькулятор простых чисел</h1>
+            <p>Проверьте, является ли число простым, и найдите простые числа в диапазоне</p>
+        </div>
+
+        <div class="calculator">
+            <div class="input-group">
+                <label for="numberInput">Введите число для проверки:</label>
+                <input type="number" id="numberInput" placeholder="Например: 17, 29, 97..." min="2">
+            </div>
+
+            <div class="buttons">
+                <button class="check-btn" onclick="checkPrime()">🔍 Проверить число</button>
+                <button class="range-btn" onclick="findPrimesInRange()">📊 Найти в диапазоне</button>
+            </div>
+
+            <div class="result">
+                <h3>Результат:</h3>
+                <div class="result-text" id="result">Введите число и нажмите одну из кнопок</div>
+            </div>
+
+            <div class="info">
+                <h3>📚 О простых числах</h3>
+                <ul>
+                    <li><strong>Простое число</strong> - натуральное число больше 1, которое имеет ровно два делителя: 1 и само себя</li>
+                    <li>Примеры: 2, 3, 5, 7, 11, 13, 17, 19, 23...</li>
+                    <li>Число 2 - единственное чётное простое число</li>
+                    <li>Простыми не являются: 1, 4, 6, 8, 9, 10, 12...</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function isPrime(num) {
+            if (num < 2) return false;
+            if (num === 2) return true;
+            if (num % 2 === 0) return false;
+            
+            for (let i = 3; i <= Math.sqrt(num); i += 2) {
+                if (num % i === 0) return false;
+            }
+            return true;
+        }
+
+        function checkPrime() {
+            const input = document.getElementById('numberInput');
+            const resultDiv = document.getElementById('result');
+            const num = parseInt(input.value);
+
+            if (isNaN(num) || num < 2) {
+                resultDiv.innerHTML = '<span class="not-prime">⚠️ Пожалуйста, введите число больше 1</span>';
+                return;
+            }
+
+            if (isPrime(num)) {
+                resultDiv.innerHTML = `<span class="prime">✅ Число ${num} является простым!</span>`;
+            } else {
+                resultDiv.innerHTML = `<span class="not-prime">❌ Число ${num} не является простым</span>`;
+            }
+        }
+
+        function findPrimesInRange() {
+            const input = document.getElementById('numberInput');
+            const resultDiv = document.getElementById('result');
+            const limit = parseInt(input.value);
+
+            if (isNaN(limit) || limit < 2) {
+                resultDiv.innerHTML = '<span class="not-prime">⚠️ Пожалуйста, введите число больше 1</span>';
+                return;
+            }
+
+            const primes = [];
+            for (let i = 2; i <= limit; i++) {
+                if (isPrime(i)) {
+                    primes.push(i);
+                }
+            }
+
+            if (primes.length === 0) {
+                resultDiv.innerHTML = '<span class="not-prime">В диапазоне до ' + limit + ' нет простых чисел</span>';
+            } else {
+                let primesHtml = `<p>Простые числа до ${limit} (всего: ${primes.length}):</p>`;
+                primesHtml += '<div class="primes-list">';
+                primes.forEach(prime => {
+                    primesHtml += `<div class="prime-number">${prime}</div>`;
+                });
+                primesHtml += '</div>';
+                resultDiv.innerHTML = primesHtml;
+            }
+        }
+
+        // Обработка нажатия Enter
+        document.getElementById('numberInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPrime();
+            }
+        });
+    </script>
+</body>
+</html>
